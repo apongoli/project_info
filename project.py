@@ -69,6 +69,12 @@ def get_data():
     return datajoueur, datajoueur2, date_foods
 
 
+# create list board
+def create_board(col=20, row=20):
+    board = [[' ' for i in range(col)] for i in range(row)]
+    return board
+
+
 # Initialise Game Board
 def init_board(col=20, row=20):
     """
@@ -80,48 +86,48 @@ def init_board(col=20, row=20):
     --------
     specification: Pongoli Alessandro (v.1 19/02/21)
     """
-    board = [[' ' for i in range(col)] for i in range(row)]
 
-    board[1][1] = "\u2655"
-    board[0][0] = "\u2656"
-    board[0][1] = "\u2658"
-    board[1][0] = "\u2658"
-    board[0][2] = "\u2658"
-    board[1][2] = "\u2658"
-    board[2][2] = "\u2658"
-    board[2][1] = "\u2658"
-    board[2][0] = "\u2658"
+    board = create_board()
 
-    board[18][18] = "\u265B"
-    board[19][19] = "\u265C"
-    board[19][18] = "\u265E"
-    board[18][19] = "\u265E"
-    board[19][17] = "\u265E"
-    board[18][17] = "\u265E"
-    board[17][17] = "\u265E"
-    board[17][18] = "\u265E"
-    board[17][19] = "\u265E"
+    # Ino file data processing
+    datajoueur, datajoueur2, date_foods = get_data()
+    white_normal = datajoueur["normal"]
+    white_alpha = datajoueur["alpha"]
+    white_omega = datajoueur["omega"]
 
-    board[3][3] = "X"
-    board[3][4] = "X"
-    board[4][3] = "X"
-    board[4][4] = "X"
-    board[15][15] = "X"
-    board[15][16] = "X"
-    board[16][15] = "X"
-    board[16][16] = "X"
-    board[0][3] = "\u25CB"
-    board[0][4] = "\u25CB"
-    board[19][15] = "\u25CB"
-    board[19][16] = "\u25CB"
-    board[3][0] = "\u25B3"
-    board[4][0] = "\u25B3"
-    board[15][19] = "\u25B3"
-    board[16][19] = "\u25B3"
-    board[4][6] = "\u25B3"
-    board[15][13] = "\u25B3"
-    board[6][4] = "\u2606"
-    board[13][15] = "\u2606"
+    black_normal = datajoueur2["normal"]
+    black_alpha = datajoueur2["alpha"]
+    black_omega = datajoueur2["omega"]
+
+    berries = date_foods["berries"]
+    apples = date_foods["apples"]
+    mice = date_foods["nice"]
+    rabbits = date_foods["rabbits"]
+    deers = date_foods["deers"]
+
+    # Set coordinate into board list for normal, alpha, omega white objects
+    for x in range(len(white_normal)):
+        board[white_normal[x][0]-1][white_normal[x][1]-1] = "\u2658"
+    board[white_alpha[0]-1][white_alpha[1]-1] = "\u2655"
+    board[white_omega[0]-1][white_omega[1]-1] = "\u2656"
+
+    # Set coordinate into board list for normal, alpha, omega black objects
+    for x in range(len(black_normal)):
+        board[black_normal[x][0]-1][black_normal[x][1]-1] = "\u265E"
+    board[black_alpha[0]-1][black_alpha[1]-1] = "\u265B"
+    board[black_omega[0]-1][black_omega[1]-1] = "\u265C"
+
+    # Set coordinate into board list for berries, apples, mice, rabbits, deers objects
+    for x in range(len(berries)):
+        board[berries[x][0]-1][berries[x][1]-1] = "X"
+    for x in range(len(apples)):
+        board[apples[x][0]-1][apples[x][1]-1] = "\u25CB"
+    for x in range(len(mice)):
+        board[mice[x][0]-1][mice[x][1]-1] = "\u25B3"
+    for x in range(len(rabbits)):
+        board[rabbits[x][0]-1][rabbits[x][1]-1] = "\u2764"
+    for x in range(len(deers)):
+        board[deers[x][0]-1][deers[x][1]-1] = "\u2606"
 
     clear()
     for x in range(0, row):
@@ -142,10 +148,4 @@ def init_board(col=20, row=20):
                     print("")
 
 
-# init_board()
-datajoueur, datajoueur2, date_foods = get_data()
-print(datajoueur)
-print("\n")
-print(datajoueur2)
-print("\n")
-print(date_foods)
+init_board()
