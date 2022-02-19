@@ -78,9 +78,14 @@ def create_board(col=20, row=20):
 # Initialise Game Board
 def init_board(col=20, row=20):
     """
-    :param col: le nombre de colonnes pour le plateau de jeu
-    :param row: le nombre de lignes pour le plateau de jeu
-    :return: pas de return mais affiche le plateau du jeu
+    Parameters
+    −−−−−−−−−−
+    col: le nombre de colonnes pour le plateau de jeu (int, optional)
+    row: le nombre de lignes pour le plateau de jeu (int, optional)
+
+    Returns
+    −−−−−−−
+    Pas de return mais affiche le plateau du jeu
 
     Version
     --------
