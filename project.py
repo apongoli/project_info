@@ -13,9 +13,73 @@ def clear():
         _ = system('clear')
 
 
-# Initialise Game Board
+# Get data from ino file
+def get_data():
+    datajoueur = {}
+    datajoueur2 = {}
+    date_foods = {}
+    fh = open("groupe_15.ano", "r")
+    lines = fh.readlines()
+    cpt = 0
+    datajoueur["normal"] = []
+    datajoueur2["normal"] = []
+    date_foods["berries"] = []
+    date_foods["apples"] = []
+    date_foods["nice"] = []
+    date_foods["rabbits"] = []
+    date_foods["deers"] = []
+    for line in lines:
+        take = line.split()
 
+        for num in take:
+
+            if take[0] == '1' and 1 <= cpt <= 150:
+                if take[3] == "alpha":
+                    datajoueur["alpha"] = [int(take[1]), int(take[2])]
+                if take[3] == "omega":
+                    datajoueur["omega"] = [int(take[1]), int(take[2])]
+                if take[3] == "normal":
+                    datajoueur["normal"] += [[int(take[1]), int(take[2])]]
+            if take[0] == "2":
+                if take[3] == "alpha":
+                    datajoueur2["alpha"] = [int(take[1]), int(take[2])]
+                if take[3] == "omega":
+                    datajoueur2["omega"] = [int(take[1]), int(take[2])]
+                if take[3] == "normal":
+                    datajoueur2["normal"] += [[int(take[1]), int(take[2])]]
+        cpt += 1
+    for line in lines:
+        take = line.split()
+        if (take[0] == "4" and take[1] == "4") or (take[0] == "4" and take[1] == "5") or (
+                take[0] == "5" and take[1] == "4") or take[0] == "5" and take[1] == "5" or (
+                take[0] == "16" and take[1] == "16") or (take[0] == "16" and take[1] == "17") or (
+                take[0] == "17" and take[1] == "16") or (take[0] == "17" and take[1] == "17"):
+            date_foods["berries"] += [[int(take[0]), int(take[1]), int(take[3])]]
+        if (take[0] == "1" and take[1] == "4") or (take[0] == "1" and take[1] == "5") or (
+                take[0] == "20" and take[1] == "16") or (take[0] == "20" and take[1] == "17"):
+            date_foods["apples"] += [[int(take[0]), int(take[1]), int(take[3])]]
+        if (take[0] == "4" and take[1] == "1") or (take[0] == "5" and take[1] == "1") or (
+                take[0] == "16" and take[1] == "20") or (take[0] == "17" and take[1] == "20"):
+            date_foods["nice"] += [[int(take[0]), int(take[1]), int(take[3])]]
+        if (take[0] == "5" and take[1] == "7") or (take[0] == "16" and take[1] == "14"):
+            date_foods["rabbits"] += [[int(take[0]), int(take[1]), int(take[3])]]
+        if (take[0] == "7" and take[1] == "5") or (take[0] == "14" and take[1] == "16"):
+            date_foods["deers"] += [[int(take[0]), int(take[1]), int(take[3])]]
+
+    return datajoueur, datajoueur2, date_foods
+
+
+# Initialise Game Board
 def init_board(col=20, row=20):
+    """
+    :param col: le nombre de colonnes pour le plateau de jeu
+    :param row: le nombre de lignes pour le plateau de jeu
+    :return: pas de return mais affiche le plateau du jeu
+
+    Version
+    --------
+    specification: Pongoli Alessandro (v.1 19/02/21)
+    """
     board = [[' ' for i in range(col)] for i in range(row)]
 
     board[1][1] = "\u2655"
@@ -78,21 +142,10 @@ def init_board(col=20, row=20):
                     print("")
 
 
-init_board()
-""" Different code for symbols
-print("\u2655")  # white Alpha
-print("\u2656")  # white Omega
-print("\u2657")  # white Human
-print("\u2658")  # white Normal
-
-print("\u265B")  # black Alpha
-print("\u265C")  # black Omega
-print("\u265D")  # black Human
-print("\u265E")  # black Normal
-
-print("\u2764")  # Rabbits
-print("\u25CB")  # Apple
-print("X")  # Berries
-print("\u25B3")  # Mice
-print("\u2606")  # Deer
-"""
+# init_board()
+datajoueur, datajoueur2, date_foods = get_data()
+print(datajoueur)
+print("\n")
+print(datajoueur2)
+print("\n")
+print(date_foods)

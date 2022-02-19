@@ -1,0 +1,16 @@
+Different code for symbols :
+print("\u2655")  # white Alpha
+print("\u2656")  # white Omega
+print("\u2657")  # white Human
+print("\u2658")  # white Normal
+
+print("\u265B")  # black Alpha
+print("\u265C")  # black Omega
+print("\u265D")  # black Human
+print("\u265E")  # black Normal
+
+print("\u2764")  # Rabbits
+print("\u25CB")  # Apple
+print("X")  # Berries
+print("\u25B3")  # Mice
+print("\u2606")  # Deer
