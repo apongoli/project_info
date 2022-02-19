@@ -13,7 +13,7 @@ def clear():
         _ = system('clear')
 
 
-# Get data from ino file
+# Get data from ano file
 def get_data():
     datajoueur = {}
     datajoueur2 = {}
@@ -77,7 +77,7 @@ def create_board(col=20, row=20):
 
 # Initialise Game Board
 def init_board(col=20, row=20):
-    """ Initialize board with coordinates objects from ino file (get_data function)
+    """ Initialize board with coordinates objects from ano file (get_data function)
     Parameters
     −−−−−−−−−−
     col: le nombre de colonnes pour le plateau de jeu (int, optional)
@@ -94,7 +94,7 @@ def init_board(col=20, row=20):
 
     board = create_board()
 
-    # Ino file data processing
+    # Ano file data processing
     datajoueur, datajoueur2, date_foods = get_data()
     white_normal = datajoueur["normal"]
     white_alpha = datajoueur["alpha"]
