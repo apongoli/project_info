@@ -2,13 +2,13 @@ import colored
 from os import system, name
 
 
-# define our clear function
+# function who clear CMD
 def clear():
     # for windows
     if name == 'nt':
         _ = system('cls')
 
-    # for mac and linux(here, os.name is 'posix')
+    # for mac and linux
     else:
         _ = system('clear')
 
@@ -17,8 +17,9 @@ def clear():
 col = 20
 row = 20
 board = [[' ' for i in range(col)] for i in range(row)]
+
 clear()
-"""
+""" Different code for symbols
 print("\u2655")  # white Alpha
 print("\u2656")  # white Omega
 print("\u2657")  # white Human
