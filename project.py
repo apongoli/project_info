@@ -77,7 +77,7 @@ def create_board(col=20, row=20):
 
 # Initialise Game Board
 def init_board(col=20, row=20):
-    """
+    """ Initialize board with coordinates objects from ino file (get_data function)
     Parameters
     −−−−−−−−−−
     col: le nombre de colonnes pour le plateau de jeu (int, optional)
