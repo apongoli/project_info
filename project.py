@@ -71,7 +71,7 @@ def get_data():
 
 # create list board
 def create_board(col=20, row=20):
-    """
+    """ Create the empty board list with the chosen size
     Parameters
     −−−−−−−−−−
     col: le nombre de colonnes pour le plateau de jeu (int, optional)
@@ -79,7 +79,7 @@ def create_board(col=20, row=20):
 
     Returns
     −−−−−−−
-    board: la liste board initialisé avec la position des pions venant du fichier ano (list)
+    board: la liste board avec la taille choisie
 
     Version
     --------
