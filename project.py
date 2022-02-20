@@ -71,6 +71,20 @@ def get_data():
 
 # create list board
 def create_board(col=20, row=20):
+    """
+    Parameters
+    −−−−−−−−−−
+    col: le nombre de colonnes pour le plateau de jeu (int, optional)
+    row: le nombre de lignes pour le plateau de jeu (int, optional)
+
+    Returns
+    −−−−−−−
+    board: la liste board initialisé avec la position des pions venant du fichier ano (list)
+
+    Version
+    --------
+    specification: Pongoli Alessandro (v.1 20/02/21)
+    """
     board = [[' ' for i in range(col)] for i in range(row)]
     return board
 
@@ -84,7 +98,7 @@ def init_game():
 
     Returns
     −−−−−−−
-    board: la liste board initialisé avec la position des pions venant du fichier ano
+    board: la liste board initialisé avec la position des pions venant du fichier ano (list)
 
     Version
     --------
@@ -136,12 +150,12 @@ def init_game():
     return board
 
 
-# Update board
-def update_board(board, col=20, row=20):
-    """ Update board on terminal with the last version of it
+# Show board
+def show_board(board, col=20, row=20):
+    """ Show board on terminal with the last version of it
     Parameters
     −−−−−−−−−−
-    board: la liste board modifié que l'on veut afficher dans le terminal
+    board: la liste board modifié que l'on veut afficher dans le terminal (list)
     col: le nombre de colonnes pour le plateau de jeu (int, optional)
     row: le nombre de lignes pour le plateau de jeu (int, optional)
 
@@ -173,4 +187,4 @@ def update_board(board, col=20, row=20):
 
 
 init_game()
-update_board(init_game())
+show_board(init_game())
