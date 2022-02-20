@@ -85,6 +85,7 @@ def create_board(col=20, row=20):
     --------
     specification: Pongoli Alessandro (v.1 20/02/21)
     """
+
     board = [[' ' for i in range(col)] for i in range(row)]
     return board
 
