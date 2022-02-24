@@ -17,6 +17,7 @@ def clear():
 def get_data():
     datajoueur = {}
     datajoueur2 = {}
+    date_maps = {}
     date_foods = {}
     fh = open("groupe_15.ano", "r")
     lines = fh.readlines()
@@ -28,6 +29,8 @@ def get_data():
     date_foods["nice"] = []
     date_foods["rabbits"] = []
     date_foods["deers"] = []
+    date_maps["maps"] = []
+
     for line in lines:
         take = line.split()
 
@@ -65,19 +68,21 @@ def get_data():
             date_foods["rabbits"] += [[int(take[0]), int(take[1]), int(take[3])]]
         if (take[0] == "7" and take[1] == "5") or (take[0] == "14" and take[1] == "16"):
             date_foods["deers"] += [[int(take[0]), int(take[1]), int(take[3])]]
+        if (take[0] == "20") and (take[1] == "20"):
+            date_maps["maps"] = [[int(take[0]), int(take[1])]]
 
-    return datajoueur, datajoueur2, date_foods
+    return datajoueur, datajoueur2, date_foods, date_maps
+
+
+# create var for get_data return and create var for map size
+datajoueur, datajoueur2, date_foods, date_maps = get_data()
+col_data = date_maps["maps"][0][0]
+row_data = date_maps["maps"][0][1]
 
 
 # create list board
-def create_board(col=20, row=20):
-    board = [[' ' for i in range(col)] for i in range(row)]
-    return board
-
-
-# Initialise Game Board
-def init_board(col=20, row=20):
-    """ Initialize board with coordinates objects from ano file (get_data function)
+def create_board(col=col_data, row=row_data):
+    """ Create the empty board list with the chosen size
     Parameters
     −−−−−−−−−−
     col: le nombre de colonnes pour le plateau de jeu (int, optional)
@@ -85,7 +90,27 @@ def init_board(col=20, row=20):
 
     Returns
     −−−−−−−
-    Pas de return mais affiche le plateau du jeu
+    board: la liste board avec la taille choisie
+
+    Version
+    --------
+    specification: Pongoli Alessandro (v.1 20/02/21)
+    """
+
+    board = [[' ' for i in range(col)] for i in range(row)]
+    return board
+
+
+# Initialise Game Board
+def init_game():
+    """ Initialize board with coordinates objects from ano file (get_data function)
+    Parameters
+    −−−−−−−−−−
+    Aucun parametres
+
+    Returns
+    −−−−−−−
+    board: la liste board initialisé avec la position des pions venant du fichier ano (list)
 
     Version
     --------
@@ -95,7 +120,6 @@ def init_board(col=20, row=20):
     board = create_board()
 
     # Ano file data processing
-    datajoueur, datajoueur2, date_foods = get_data()
     white_normal = datajoueur["normal"]
     white_alpha = datajoueur["alpha"]
     white_omega = datajoueur["omega"]
@@ -112,30 +136,54 @@ def init_board(col=20, row=20):
 
     # Set coordinate into board list for normal, alpha, omega white objects
     for x in range(len(white_normal)):
-        board[white_normal[x][0]-1][white_normal[x][1]-1] = "\u2658"
-    board[white_alpha[0]-1][white_alpha[1]-1] = "\u2655"
-    board[white_omega[0]-1][white_omega[1]-1] = "\u2656"
+        board[white_normal[x][0] - 1][white_normal[x][1] - 1] = "\u2658"
+    board[white_alpha[0] - 1][white_alpha[1] - 1] = "\u2655"
+    board[white_omega[0] - 1][white_omega[1] - 1] = "\u2656"
 
     # Set coordinate into board list for normal, alpha, omega black objects
     for x in range(len(black_normal)):
-        board[black_normal[x][0]-1][black_normal[x][1]-1] = "\u265E"
-    board[black_alpha[0]-1][black_alpha[1]-1] = "\u265B"
-    board[black_omega[0]-1][black_omega[1]-1] = "\u265C"
+        board[black_normal[x][0] - 1][black_normal[x][1] - 1] = "\u265E"
+    board[black_alpha[0] - 1][black_alpha[1] - 1] = "\u265B"
+    board[black_omega[0] - 1][black_omega[1] - 1] = "\u265C"
 
     # Set coordinate into board list for berries, apples, mice, rabbits, deers objects
     for x in range(len(berries)):
-        board[berries[x][0]-1][berries[x][1]-1] = "X"
+        board[berries[x][0] - 1][berries[x][1] - 1] = "X"
     for x in range(len(apples)):
-        board[apples[x][0]-1][apples[x][1]-1] = "\u25CB"
+        board[apples[x][0] - 1][apples[x][1] - 1] = "\u25CB"
     for x in range(len(mice)):
-        board[mice[x][0]-1][mice[x][1]-1] = "\u25B3"
+        board[mice[x][0] - 1][mice[x][1] - 1] = "\u25B3"
     for x in range(len(rabbits)):
-        board[rabbits[x][0]-1][rabbits[x][1]-1] = "\u2764"
+        board[rabbits[x][0] - 1][rabbits[x][1] - 1] = "\u2764"
     for x in range(len(deers)):
-        board[deers[x][0]-1][deers[x][1]-1] = "\u2606"
+        board[deers[x][0] - 1][deers[x][1] - 1] = "\u2606"
 
+    return board
+
+
+# Show board
+def show_board(board, col=col_data, row=row_data):
+    """ Show board on terminal with the last version of it
+    Parameters
+    −−−−−−−−−−
+    board: la liste board modifié que l'on veut afficher dans le terminal (list)
+    col: le nombre de colonnes pour le plateau de jeu (int, optional)
+    row: le nombre de lignes pour le plateau de jeu (int, optional)
+
+    Returns
+    −−−−−−−
+    Pas de return mais affiche le plateau du jeu
+
+    Version
+    --------
+    specification: Pongoli Alessandro (v.1 20/02/21)
+    """
     clear()
+    list_num = ["0 ", "1 ", "2 ", "3 ", "4 ", "5 ", "6 ", "7 ", "8 ", "9 ", "10", "11", "12", "13", "14", "15", "16",
+                "17", "18", "19"]
+    print("   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19")
     for x in range(0, row):
+        print(list_num[x], end="")
         for y in range(0, col):
             if (x + y) % 2 == 0:
                 if y < col - 1:
@@ -153,4 +201,5 @@ def init_board(col=20, row=20):
                     print("")
 
 
-init_board()
+init_game()
+show_board(init_game())
