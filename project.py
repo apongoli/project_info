@@ -70,7 +70,6 @@ def get_data():
             date_foods["deers"] += [[int(take[0]), int(take[1]), int(take[3])]]
         if (take[0] == "20") and (take[1] == "20"):
             date_maps["maps"] = [[int(take[0]), int(take[1])]]
-
     return datajoueur, datajoueur2, date_foods, date_maps
 
 
@@ -78,6 +77,56 @@ def get_data():
 datajoueur, datajoueur2, date_foods, date_maps = get_data()
 col_data = date_maps["maps"][0][0]
 row_data = date_maps["maps"][0][1]
+
+# Supprimer les doublons
+normal_team1_raw = datajoueur["normal"]
+normal_team1 = []
+for i in normal_team1_raw:
+    if i not in normal_team1:
+        normal_team1.append(i)
+datajoueur["normal"] = normal_team1
+normal_team2_raw = datajoueur2["normal"]
+normal_team2 = []
+for i in normal_team2_raw:
+    if i not in normal_team2:
+        normal_team2.append(i)
+datajoueur2["normal"] = normal_team2
+
+# create dict game
+temp_dict_team1 = {}
+for x in range(len(datajoueur["normal"])):
+    temp_dict_team1["(" + str(datajoueur["normal"][x][0]) + "," + str(datajoueur["normal"][x][1]) + ")"] = \
+        ["normal", 100]
+temp_dict_team1["(" + str(datajoueur["alpha"][0]) + "," + str(datajoueur["alpha"][1]) + ")"] = ["alpha", 100]
+temp_dict_team1["(" + str(datajoueur["omega"][0]) + "," + str(datajoueur["omega"][1]) + ")"] = ["omega", 100]
+team1 = temp_dict_team1
+
+temp_dict_team2 = {}
+for x in range(len(datajoueur2["normal"])):
+    temp_dict_team2["(" + str(datajoueur2["normal"][x][0]) + "," + str(datajoueur2["normal"][x][1]) + ")"] = ["normal",
+                                                                                                              100]
+temp_dict_team2["(" + str(datajoueur2["alpha"][0]) + "," + str(datajoueur2["alpha"][1]) + ")"] = ["alpha", 100]
+temp_dict_team2["(" + str(datajoueur2["omega"][0]) + "," + str(datajoueur2["omega"][1]) + ")"] = ["omega", 100]
+team2 = temp_dict_team2
+
+temp_dict_foods = {}
+for x in range(len(date_foods["berries"])):
+    temp_dict_foods["(" + str(date_foods["berries"][x][0]) + "," + str(date_foods["berries"][x][1]) + ")"] = \
+        ["berries", date_foods["berries"][x][2]]
+for x in range(len(date_foods["apples"])):
+    temp_dict_foods["(" + str(date_foods["apples"][x][0]) + "," + str(date_foods["apples"][x][1]) + ")"] = \
+        ["apples", date_foods["apples"][x][2]]
+for x in range(len(date_foods["nice"])):
+    temp_dict_foods["(" + str(date_foods["nice"][x][0]) + "," + str(date_foods["nice"][x][1]) + ")"] = \
+        ["nice", date_foods["nice"][x][2]]
+for x in range(len(date_foods["rabbits"])):
+    temp_dict_foods["(" + str(date_foods["rabbits"][x][0]) + "," + str(date_foods["rabbits"][x][1]) + ")"] = \
+        ["rabbits", date_foods["rabbits"][x][2]]
+for x in range(len(date_foods["deers"])):
+    temp_dict_foods["(" + str(date_foods["deers"][x][0]) + "," + str(date_foods["deers"][x][1]) + ")"] = \
+        ["deers", date_foods["deers"][x][2]]
+foods = temp_dict_foods
+game = {"MAP": date_maps["maps"], "WEREWOLVES": {"TEAM_1": team1, "TEAM_2": team2}, "FOODS": foods}
 
 
 # create list board
@@ -101,105 +150,178 @@ def create_board(col=col_data, row=row_data):
     return board
 
 
-# Initialise Game Board
-def init_game():
-    """ Initialize board with coordinates objects from ano file (get_data function)
-    Parameters
-    −−−−−−−−−−
-    Aucun parametres
+def board(board_list=create_board(), game=game):
+    """ Set board dict and show it on terminal with the last version of it too
+        Parameters
+        −−−−−−−−−−
+        board_list: la liste board vide (list)
+        game: le dictionnaire game (dict)
 
-    Returns
-    −−−−−−−
-    board: la liste board initialisé avec la position des pions venant du fichier ano (list)
+        Returns
+        −−−−−−−
+        Pas de return mais affiche le plateau du jeu
 
-    Version
-    --------
-    specification: Pongoli Alessandro (v.1 19/02/21)
-    """
+        Version
+        --------
+        specification: Pongoli Alessandro (v.1 20/02/21)
+        """
+    list_board = board_list
+    board = {}
 
-    board = create_board()
+    team1_normal = []
+    team1_alpha = []
+    team1_omega = []
 
-    # Ano file data processing
-    white_normal = datajoueur["normal"]
-    white_alpha = datajoueur["alpha"]
-    white_omega = datajoueur["omega"]
+    team2_normal = []
+    team2_alpha = []
+    team2_omega = []
 
-    black_normal = datajoueur2["normal"]
-    black_alpha = datajoueur2["alpha"]
-    black_omega = datajoueur2["omega"]
+    berries = []
+    apples = []
+    mice = []
+    rabbits = []
+    deers = []
 
-    berries = date_foods["berries"]
-    apples = date_foods["apples"]
-    mice = date_foods["nice"]
-    rabbits = date_foods["rabbits"]
-    deers = date_foods["deers"]
+    characters = "()"
 
-    # Set coordinate into board list for normal, alpha, omega white objects
-    for x in range(len(white_normal)):
-        board[white_normal[x][0] - 1][white_normal[x][1] - 1] = "\u2658"
-    board[white_alpha[0] - 1][white_alpha[1] - 1] = "\u2655"
-    board[white_omega[0] - 1][white_omega[1] - 1] = "\u2656"
+    for key in game["WEREWOLVES"]["TEAM_1"].keys():
+        item = key
+        for x in range(len(characters)):
+            item = item.replace(characters[x], "")
+        item = item.split(",")
+        item = [int(i) for i in item]
+        item.append(game["WEREWOLVES"]["TEAM_1"][key][1])
+        if game["WEREWOLVES"]["TEAM_1"][key][0] == "normal":
+            team1_normal.append(item)
+        if game["WEREWOLVES"]["TEAM_1"][key][0] == "omega":
+            team1_omega.append(item)
+        if game["WEREWOLVES"]["TEAM_1"][key][0] == "alpha":
+            team1_alpha.append(item)
 
-    # Set coordinate into board list for normal, alpha, omega black objects
-    for x in range(len(black_normal)):
-        board[black_normal[x][0] - 1][black_normal[x][1] - 1] = "\u265E"
-    board[black_alpha[0] - 1][black_alpha[1] - 1] = "\u265B"
-    board[black_omega[0] - 1][black_omega[1] - 1] = "\u265C"
+    for key in game["WEREWOLVES"]["TEAM_2"].keys():
+        item = key
+        for x in range(len(characters)):
+            item = item.replace(characters[x], "")
+        item = item.split(",")
+        item = [int(i) for i in item]
+        item.append(game["WEREWOLVES"]["TEAM_2"][key][1])
+        if game["WEREWOLVES"]["TEAM_2"][key][0] == "normal":
+            team2_normal.append(item)
+        if game["WEREWOLVES"]["TEAM_2"][key][0] == "omega":
+            team2_omega.append(item)
+        if game["WEREWOLVES"]["TEAM_2"][key][0] == "alpha":
+            team2_alpha.append(item)
+
+    for key in game["FOODS"].keys():
+        item = key
+        for x in range(len(characters)):
+            item = item.replace(characters[x], "")
+        item = item.split(",")
+        item = [int(i) for i in item]
+        item.append(game["FOODS"][key][1])
+        if game["FOODS"][key][0] == "berries":
+            berries.append(item)
+        if game["FOODS"][key][0] == "apples":
+            apples.append(item)
+        if game["FOODS"][key][0] == "mice":
+            mice.append(item)
+        if game["FOODS"][key][0] == "rabbits":
+            rabbits.append(item)
+        if game["FOODS"][key][0] == "deers":
+            deers.append(item)
+
+    # Set coordinate into board list for normal, alpha, omega team1 objects
+    for x in range(len(team1_normal)):
+        list_board[team1_normal[x][0] - 1][team1_normal[x][1] - 1] = "\u2658"
+    list_board[team1_alpha[0][0] - 1][team1_alpha[0][1] - 1] = "\u2655"
+    list_board[team1_omega[0][0] - 1][team1_omega[0][1] - 1] = "\u2656"
+
+    # Set coordinate into board list for normal, alpha, omega team2 objects
+    for x in range(len(team2_normal)):
+        list_board[team2_normal[x][0] - 1][team2_normal[x][1] - 1] = "\u265E"
+    list_board[team2_alpha[0][0] - 1][team2_alpha[0][1] - 1] = "\u265B"
+    list_board[team2_omega[0][0] - 1][team2_omega[0][1] - 1] = "\u265C"
 
     # Set coordinate into board list for berries, apples, mice, rabbits, deers objects
     for x in range(len(berries)):
-        board[berries[x][0] - 1][berries[x][1] - 1] = "X"
+        list_board[berries[x][0] - 1][berries[x][1] - 1] = "X"
     for x in range(len(apples)):
-        board[apples[x][0] - 1][apples[x][1] - 1] = "\u25CB"
+        list_board[apples[x][0] - 1][apples[x][1] - 1] = "\u25CB"
     for x in range(len(mice)):
-        board[mice[x][0] - 1][mice[x][1] - 1] = "\u25B3"
+        list_board[mice[x][0] - 1][mice[x][1] - 1] = "\u25B3"
     for x in range(len(rabbits)):
-        board[rabbits[x][0] - 1][rabbits[x][1] - 1] = "\u2764"
+        list_board[rabbits[x][0] - 1][rabbits[x][1] - 1] = "\u2764"
     for x in range(len(deers)):
-        board[deers[x][0] - 1][deers[x][1] - 1] = "\u2606"
+        list_board[deers[x][0] - 1][deers[x][1] - 1] = "\u2606"
 
-    return board
+    board["board"] = list_board
 
+    # Set list for show energy on terminal
+    team1_all = []
+    for x in range(len(team1_normal)):
+        temp_team = team1_normal[x]
+        temp_team.append("normal")
+        team1_all.append(temp_team)
+    temp_team = team1_alpha[0]
+    temp_team.append("alpha")
+    team1_all.append(temp_team)
+    temp_team = team1_omega[0]
+    temp_team.append("omega")
+    team1_all.append(temp_team)
 
-# Show board
-def show_board(board, col=col_data, row=row_data):
-    """ Show board on terminal with the last version of it
-    Parameters
-    −−−−−−−−−−
-    board: la liste board modifié que l'on veut afficher dans le terminal (list)
-    col: le nombre de colonnes pour le plateau de jeu (int, optional)
-    row: le nombre de lignes pour le plateau de jeu (int, optional)
+    team2_all = []
+    for x in range(len(team2_normal)):
+        temp_team = team2_normal[x]
+        temp_team.append("normal")
+        team2_all.append(temp_team)
+    temp_team = team2_alpha[0]
+    temp_team.append("alpha")
+    team2_all.append(temp_team)
+    temp_team = team2_omega[0]
+    temp_team.append("omega")
+    team2_all.append(temp_team)
 
-    Returns
-    −−−−−−−
-    Pas de return mais affiche le plateau du jeu
-
-    Version
-    --------
-    specification: Pongoli Alessandro (v.1 20/02/21)
-    """
+    foods_energy = {"berries": 10, "apples": 30, "nice": 50, "rabbits": 100, "deers": 500}
+    # show board
     clear()
     list_num = ["0 ", "1 ", "2 ", "3 ", "4 ", "5 ", "6 ", "7 ", "8 ", "9 ", "10", "11", "12", "13", "14", "15", "16",
                 "17", "18", "19"]
-    print("   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19")
-    for x in range(0, row):
-        print(list_num[x], end="")
-        for y in range(0, col):
+    print("   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19")  # Affiche les numeros horizontal
+    for x in range(0, row_data):
+        print(list_num[x], end="")  # Affiche les numeros vertical
+        for y in range(0, col_data):
             if (x + y) % 2 == 0:
-                if y < col - 1:
-                    print(colored.fg('blue') + colored.bg('white') + " " + board[x][y], end=" " + colored.attr('reset'))
+                if y < col_data - 1:
+                    print(colored.fg('blue') + colored.bg('white') + " " + board["board"][x][y],
+                          end=" " + colored.attr('reset'))
                 else:
-                    print(colored.fg('blue') + colored.bg('white') + " " + board[x][y], end=" " + colored.attr('reset'))
-                    print("")
+                    print(colored.fg('blue') + colored.bg('white') + " " + board["board"][x][y],
+                          end=" " + colored.attr('reset'))
+                    if 0 < x < 9:
+                        print(" Team1", team1_all[x][3], "coordinate:", team1_all[x][0], team1_all[x][1],
+                              "Energy:", team1_all[x][2], "| Team2", team2_all[x][3], "coordinate:", team2_all[x][0],
+                              team2_all[x][1], "Energy:", team2_all[x][2])
+                    if x == 9:
+                        print(" Berries Energy:", foods_energy["berries"], "| Apples Energy:", foods_energy["apples"])
+                    if x == 11:
+                        print(" Deers Energy:", foods_energy["deers"])
+                    if x >= 12:
+                        print("")
             else:
-                if y < col - 1:
-                    print(colored.fg('yellow') + colored.bg('black') + " " + board[x][y],
+                if y < col_data - 1:
+                    print(colored.fg('yellow') + colored.bg('black') + " " + board["board"][x][y],
                           end=" " + colored.attr('reset'))
                 else:
-                    print(colored.fg('yellow') + colored.bg('black') + " " + board[x][y],
+                    print(colored.fg('yellow') + colored.bg('black') + " " + board["board"][x][y],
                           end=" " + colored.attr('reset'))
-                    print("")
+                    if 0 <= x < 9:
+                        print(" Team1", team1_all[x][3], "coordinate:", team1_all[x][0], team1_all[x][1],
+                              "Energy:", team1_all[x][2], "| Team2", team2_all[x][3], "coordinate:", team2_all[x][0],
+                              team2_all[x][1], "Energy:", team2_all[x][2])
+                    if x == 10:
+                        print(" Nice Energy:", foods_energy["nice"], "| Rabbits Energy:", foods_energy["rabbits"])
+                    if x >= 12:
+                        print("")
 
 
-init_game()
-show_board(init_game())
+board()
