@@ -302,9 +302,9 @@ def board(board_list=create_board(), game=game):
                               "Energy:", team1_all[x][2], "| Team2", team2_all[x][3], "coordinate:", team2_all[x][0],
                               team2_all[x][1], "Energy:", team2_all[x][2])
                     if x == 9:
-                        print(" Berries Energy:", foods_energy["berries"], "| Apples Energy:", foods_energy["apples"])
+                        print(" X Berries Energy:", foods_energy["berries"], "| \u25CB Apples Energy:", foods_energy["apples"])
                     if x == 11:
-                        print(" Deers Energy:", foods_energy["deers"])
+                        print(" \u2606 Deers Energy:", foods_energy["deers"])
                     if x >= 12:
                         print("")
             else:
@@ -319,7 +319,7 @@ def board(board_list=create_board(), game=game):
                               "Energy:", team1_all[x][2], "| Team2", team2_all[x][3], "coordinate:", team2_all[x][0],
                               team2_all[x][1], "Energy:", team2_all[x][2])
                     if x == 10:
-                        print(" Nice Energy:", foods_energy["nice"], "| Rabbits Energy:", foods_energy["rabbits"])
+                        print(" \u25B3 Nice Energy:", foods_energy["nice"], "| \u2764 Rabbits Energy:", foods_energy["rabbits"])
                     if x >= 12:
                         print("")
 
